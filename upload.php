@@ -89,7 +89,7 @@
           echo "File ". basename( $_FILES["fileupload"]["name"]).
           " Đã upload thành công.";
 
-          echo "File lưu tại https://ftbl0cloud.000webhostapp.com/" . $target_file;
+          echo "File lưu tại: 𝐘𝐨𝐮𝐫 𝐩𝐫𝐞-𝐝𝐢𝐫𝐞𝐜𝐭𝐨𝐫𝐲" . $target_file;
 
       }
       else
