@@ -3,6 +3,7 @@
 if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
     (isset($_FILES['fileupload']))) {
 
+    $allowed_types = array('image/jpeg', 'image/png', 'image/gif', 'video/mp4'); //danh sách loại file cho phép upload
     $files = $_FILES['fileupload'];
 
     $names      = $files['name'];
@@ -14,21 +15,23 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
     $numitems = count($names);
     $numfiles = 0;
     for ($i = 0; $i < $numitems; $i ++) {
-        //Kiểm tra file thứ $i trong mảng file, up thành công không
-        if ($errors[$i] == 0) {
+        $filetype = mime_content_type($tmp_names[$i]); // kiểm tra định dạng file
+        //Kiểm tra file thứ $i trong mảng file, up thành công không và có đúng định dạng không
+        if ($errors[$i] == 0 && in_array($filetype, $allowed_types)) {
             $numfiles++;
             echo "Bạn upload file thứ $numfiles:<br>";
             echo "Tên file: $names[$i] <br>";
             echo "Lưu tại: 𝐘𝐨𝐮𝐫 𝐩𝐫𝐞-𝐝𝐢𝐫𝐞𝐜𝐭𝐨𝐫𝐲$names[$i] <br>";
             echo "Cỡ file: $sizes[$i] <br><hr>";
 
-            //Code xử lý di chuyển file đến thư mục cần thiết ở đây (bạn tự thực hiện)
-            //Ví dụ 
             move_uploaded_file($tmp_names[$i], 'uploads-cdn/'.$names[$i]);
+        } else {
+            echo "Upload không thành công: $names[$i] không phải là file ảnh hoặc video hợp lệ<br>";
         }
     }
     echo "Tổng số file upload: " .$numfiles;
 }
+
 ?>
 
 <form method="post" enctype="multipart/form-data">
