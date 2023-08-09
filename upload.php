@@ -1,65 +1,65 @@
 <?php
   
-  // file upload.php xử lý upload file
+  // FILE upload.php PROCESSING FILES
 
   if ($_SERVER['REQUEST_METHOD'] !== 'POST') 
   {
-      // Dữ liệu gửi lên server không bằng phương thức post
-      echo "Phải Post dữ liệu";
+      // Check if the request method is POST.
+      echo "The request method is not POST.";
       die;
   }
 
-  // Kiểm tra có dữ liệu fileupload trong $_FILES không
-  // Nếu không có thì dừng
+  // Check if the file upload field is empty.
+  // If data empty then stop
   if (!isset($_FILES["fileupload"])) 
   {
-      echo "Dữ liệu không đúng cấu trúc";
+      echo "The file upload field is empty.";
       die;
   }
 
-  // Kiểm tra dữ liệu có bị lỗi không
+  // Check if there was an error uploading the file.
   if ($_FILES["fileupload"]['error'] != 0)
   {
-    echo "Dữ liệu upload bị lỗi";
+    echo "An error occured. There was an error uploading the file, error code: $error_code.";
     die;
   }
 
-  // Đã có dữ liệu upload, thực hiện xử lý file upload
+  // First check successfully, then continue these steps
 
-  //Thư mục bạn sẽ lưu file upload
+  // Folder
   $target_dir    = "uploads-cdn/";
-  //Vị trí file lưu tạm trong server (file sẽ lưu trong uploads, với tên giống tên ban đầu)
+  // Temporary file (data will save in uploads with it's own name)
   $target_file   = $target_dir . basename($_FILES["fileupload"]["name"]);
 
   $allowUpload   = true;
 
-  //Lấy phần mở rộng của file (jpg, png, ...)
+  // Get the file upload extension information.
   $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
-  // Cỡ lớn nhất được upload (bytes)
+  // Max upload file size
   $maxfilesize   = 8900000; 
 
-  ////Những loại file được phép upload
+  //// Check if the file type is allowed.
   $allowtypes    = array('jpg', 'png', 'jpeg', 'gif');
 
 
   if(isset($_POST["submit"])) {
-      //Kiểm tra xem có phải là ảnh bằng hàm getimagesize
+      // Check if the file type is allowed. It's image?
       $check = getimagesize($_FILES["fileupload"]["tmp_name"]);
       if($check !== false) 
       {
-          echo "Đây là file ảnh - " . $check["mime"] . ".";
+          echo "Image file(s) - " . $check["mime"] . ".";
           $allowUpload = true;
       } 
       else 
       {
-          echo "Không phải file ảnh.";
+          echo "Not image file(s).";
           $allowUpload = false;
       }
   }
 
-  // Kiểm tra nếu file đã tồn tại thì không cho phép ghi đè
-  // Bạn có thể phát triển code để lưu thành một tên file khác
+  // Check if file already exists then do not allow overwriting.
+  // You can develop the code to save as a different filename
   if (file_exists($target_file)) 
   {
       echo "Tên file đã tồn tại trên server, không được ghi đè";
