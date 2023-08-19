@@ -28,7 +28,7 @@ $target_dir = "../tailieu/";
 // Temporary file (data will be saved in uploads with its own name)
 $extension = pathinfo($_FILES["fileupload"]["name"], PATHINFO_EXTENSION);
 $randomName = generateRandomName();
-$target_file = $target_dir . $randomName . '.' . $extension;
+$target_file = $target_dir . basename( $_FILES["fileupload"]["name"]) . ㅤㅤFileID . $randomName . '.' . $extension;
 
 $allowUpload = true;
 
@@ -56,7 +56,7 @@ if (isset($_POST["submit"])) {
 // Check if the file already exists and do not allow overwriting.
 // You can develop the code to save it as a different filename
 if (file_exists($target_file)) {
-    echo "Tệp đã tồn tại, vui lòng đổi tên tệp trước rồi thử tải lên lại, máy chủ không cho phép ghi đè để tránh việc xóa tệp bất hợp pháp.";
+    echo "Tệp đã tồn tại.";
     $allowUpload = false;
 }
 
