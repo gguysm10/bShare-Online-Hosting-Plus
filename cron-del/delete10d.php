@@ -1,1 +1,0 @@
-find /public_html/uploads-cdn -type f -delete
